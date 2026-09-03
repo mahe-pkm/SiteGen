@@ -197,15 +197,18 @@ existing attribution and quotas. Demo records remain blocked from the pilot.
 Configure STAGING_ORIGIN, STAGING_DEPLOY_TOKEN, STAGING_REVIEW_USERNAME and
 STAGING_REVIEW_PASSWORD only in the local ignored environment after installation.
 The running local backend must be restarted to load these new modules/settings.
-No credentials, DNS records, VPS files, or live deployments were created during
-this implementation. Existing records and generated releases were not changed.
+On 2026-09-03, the protected gateway was deployed and its HTTPS, authentication,
+Google API connectivity and isolation from existing VPS services were verified.
+Local connection settings are saved in an ignored environment file. The local
+backend restart and the first reviewed customer-site deployment remain pending.
+Existing local records and generated releases were not changed.
 
 See `deploy/README.md` for the Hostinger target, isolated DNS records, container
 setup, installation gates, and rollback. Verify both the gateway and wildcard
 DNS records before installation; repository state does not establish current
 DNS propagation. Do not change the VPS resolver or main-domain DNS as a shortcut.
 
-Staging verification: 42 unit/integration tests plus the production build passed;
+Staging verification: 43 unit/integration tests plus the production build passed;
 15 isolated browser checks cover the review gate, failure/retry, persisted test
 link, routing label, dirty-state protection, and 1440/390/320px layouts:
 
@@ -215,8 +218,9 @@ node scripts/check-staging-ui.mjs
 
 The browser script uses Playwright/Chrome with temporary local data and mocked
 network deployment, not the VPS. It accepts the same PLAYWRIGHT_MODULE override
-as the Signature browser script. Real DNS/TLS/container deployment verification
-remains pending. Review Google terms/attribution, allowed data uses, rate limits,
+as the Signature browser script. The gateway's DNS/TLS/container verification
+passed; a real customer release still needs end-to-end verification. Review
+Google terms/attribution, allowed data uses, rate limits,
 privacy/terms pages and business authorization before any public launch.
 
 Meta/WhatsApp intake, automatic message delivery, billing, and GBP management

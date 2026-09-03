@@ -8,6 +8,26 @@ the `coolify` network, entrypoints `http`/`https`, the `letsencrypt` HTTP challe
 resolver, and `/data/coolify/proxy/dynamic` as its watched file directory.
 Existing Coolify, Supabase, Buzl and Formhub containers must not be modified.
 
+## Pilot Status: 2026-09-03
+
+- Gateway deployed from application commit `8e68cca` at https://preview.rclk.in/.
+- Trusted HTTPS, Basic review authentication, bearer-only administration,
+  secret-path protection, and noindex/no-store headers verified live.
+- A minimal Google Place ID request from the gateway returned HTTP 200.
+- Existing 24 containers retained their IDs, start times and restart counts;
+  the pre-existing proxy files retained their SHA-256 hashes.
+- Gateway port 3310 is bound only to 127.0.0.1. Secrets are outside the source
+  release in a root-owned mode-600 environment file and are not committed.
+- Rollback files are under `/opt/proto1-staging/backups/`; the initial image is
+  retained as `proto1-staging:d13095b` and the current source release is under
+  `/opt/proto1-staging/releases/8e68cca/`.
+- Local connection settings are saved in the ignored environment. Restarting
+  the local backend and selecting/reviewing the first customer release remain
+  necessary; no customer website has been uploaded or activated yet.
+
+This is a dated verification snapshot, not continuous monitoring. Recheck the
+live state before a subsequent installation or migration.
+
 ## DNS Boundary
 
 The authoritative nameservers for rclk.in are `lunar.dns-parking.com` and
