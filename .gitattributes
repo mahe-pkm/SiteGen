@@ -1,0 +1,17 @@
+* text=auto eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.mjs text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.hbs text eol=lf
+*.svg text eol=lf
+Dockerfile text eol=lf
+*.webp binary
+*.ttf binary
+# Preserve upstream license text, including its original whitespace.
+Proto_1/public/design-preview/assets/*-OFL.txt -whitespace

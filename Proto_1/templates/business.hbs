@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="{{robots}}">
+  <meta name="proto-site-id" content="{{siteId}}">
+  <title>{{name}} | {{category}} in {{city}}</title>
+  <meta name="description" content="{{description}}">
+  <meta property="og:title" content="{{name}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="./style.css">
+  {{#if structured}}<script type="application/ld+json">{{{structured}}}</script>{{/if}}
+</head>
+<body class="theme-{{template}}">
+  {{#if demo}}<div class="demo-note">Sample website. This is a fictional business with demonstration content.</div>{{/if}}
+  <header class="header">
+    <a href="#home" class="brand">{{name}}</a>
+    <nav aria-label="Main navigation"><a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a></nav>
+    <a class="nav-cta" href="#contact">Get in touch <span aria-hidden="true">&#8599;</span></a>
+  </header>
+  <main>
+    <section class="hero {{#unless hasImage}}text-hero{{/unless}}" id="home">
+      {{#if hasImage}}<img src="./hero.webp" alt="{{#if showIllustrationNote}}Illustrative interior, not the business premises{{else}}{{name}} business photograph{{/if}}" class="hero-image" fetchpriority="high">{{/if}}
+      <div class="hero-copy"><p class="eyebrow">{{category}} / {{city}}</p><h1>{{name}}</h1><p class="hero-description">{{description}}</p><a class="button" href="#contact">Make an enquiry <span aria-hidden="true">&#8594;</span></a></div>
+      {{#if showIllustrationNote}}<span class="image-credit">Illustrative template image</span>{{/if}}
+    </section>
+    <section class="intro wrap" id="about"><p class="eyebrow">About us</p><div><h2>{{category}}, in {{city}}.</h2><p>{{description}}</p></div></section>
+    <section class="services wrap" id="services"><div class="section-head"><p class="eyebrow">Our services</p><h2>How can we help?</h2></div><div class="service-grid">{{#each serviceItems}}<article><span class="service-index">{{number}}</span><h3>{{name}}</h3><a href="#contact">Enquire about this service <span aria-hidden="true">&#8599;</span></a></article>{{/each}}</div></section>
+    <section class="contact" id="contact"><div class="wrap contact-grid"><div><p class="eyebrow">Start a conversation</p><h2>Let's talk.</h2><p>Contact {{name}} to discuss your requirements.</p><div class="actions">{{#if phone}}<a class="button" href="{{phoneHref}}">Call {{phone}}</a>{{/if}}{{#if whatsapp}}<a class="button secondary" href="{{whatsappHref}}" target="_blank" rel="noopener noreferrer">WhatsApp</a>{{/if}}{{#if email}}<a class="button secondary" href="mailto:{{email}}">Email us</a>{{/if}}</div></div><div class="details"><h3>Find us</h3><p>{{address}}<br>{{city}}</p><a href="{{mapsHref}}" target="_blank" rel="noopener noreferrer">View on Google Maps &#8599;</a>{{#if hours}}<h3>Business hours</h3><p class="hours">{{hours}}</p>{{/if}}{{#unless phone}}{{#unless whatsapp}}{{#unless email}}<p>Contact details are available on the business listing.</p>{{/unless}}{{/unless}}{{/unless}}</div></div></section>
+  </main>
+  <footer class="wrap footer"><span>&copy; {{year}} {{name}}</span><span>Website by Buzl x Grexa</span></footer>
+</body>
+</html>

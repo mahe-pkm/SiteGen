@@ -1,0 +1,33 @@
+node_modules/
+dist/
+.data/
+.env
+.env.*
+!.env.example
+*.log
+artifacts/
+
+# Local tooling, runtime files and credentials.
+.vercel/
+.cache/
+coverage/
+test-results/
+playwright-report/
+uploads/
+backups/
+secrets.env
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
+*.tar
+*.tar.gz
+
+# Optimized runtime assets are committed; duplicate source photos stay local.
+/public/design-preview/assets/*.jpg
+/scripts/prepare-design-preview.mjs

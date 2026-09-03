@@ -1,0 +1,37 @@
+services:
+  gateway:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: proto1-staging:local
+    container_name: proto1-staging
+    restart: unless-stopped
+    env_file: /opt/proto1-staging/secrets.env
+    environment:
+      DATA_DIR: /data
+      STAGING_ROUTE_FILE: /routes/proto1-staging.yaml
+    volumes:
+      - /opt/proto1-staging/data:/data
+      - /data/coolify/proxy/dynamic/proto1-staging.yaml:/routes/proto1-staging.yaml
+    networks:
+      - coolify
+    ports:
+      - "127.0.0.1:3310:3100"
+    mem_limit: 512m
+    cpus: 1.0
+    pids_limit: 128
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+networks:
+  coolify:
+    external: true

@@ -1,0 +1,6 @@
+# Publish only the active prototype. Other workspace folders stay local.
+/*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/Proto_1/
