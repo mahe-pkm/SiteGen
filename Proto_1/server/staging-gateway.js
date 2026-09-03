@@ -31,6 +31,8 @@ export function proxyConfiguration(hosts) {
 export function createStagingGateway(config, dependencies = {}) {
   if (!/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(config.stagingHost) || !config.stagingToken || config.stagingToken.length < 32 || !config.stagingPassword || config.stagingPassword.length < 20 || !config.stagingUsername) throw new Error('Staging requires a hostname and strong credentials.');
   const app = express(); app.disable('x-powered-by');
+  // The gateway is reachable publicly only through the single Traefik hop.
+  app.set('trust proxy', 1);
   const store = openStore(config.dataDir);
   store.db.exec(`CREATE TABLE IF NOT EXISTS staging_sites (id TEXT PRIMARY KEY, slug TEXT UNIQUE NOT NULL, place_id TEXT NOT NULL, live_google INTEGER NOT NULL, active_version INTEGER NOT NULL DEFAULT 0);
     CREATE TABLE IF NOT EXISTS staging_releases (site_id TEXT NOT NULL, version INTEGER NOT NULL, fingerprint TEXT NOT NULL, files TEXT NOT NULL, PRIMARY KEY(site_id,version));`);

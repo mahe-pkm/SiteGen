@@ -34,6 +34,10 @@ DNS changes have NOT been made by the current implementation.
 - Upload endpoints require a separate long server-side bearer token and only
   accept the gateway hostname. Customer hosts cannot reach administration APIs.
 - No application ports are exposed publicly. Port 3310 binds to loopback only.
+- The gateway trusts exactly one reverse-proxy hop for client rate limits.
+  Keep Traefik as the only public entrypoint; do not expose the container port
+  directly or insert another proxy without reviewing this setting. Host-based
+  access checks continue to use the original Host header, not forwarded hosts.
 - `prepare` uploads a checksummed, allowlisted immutable release. A per-host
   Traefik router triggers an individual certificate using HTTP-01, not a
   wildcard certificate or a new DNS challenge per business.

@@ -36,7 +36,7 @@ async function fixture(t) {
     assert.equal(path.dirname(path.resolve(dataDir)), path.resolve(os.tmpdir())); assert.ok(path.basename(dataDir).startsWith('proto1-staging-test-'));
     await rm(dataDir, { recursive: true, force: true });
   });
-  return { config, call, basic, routedFetch, googleCalls: () => googleCalls };
+  return { config, call, basic, routedFetch, base, bearer, googleCalls: () => googleCalls };
 }
 function payload(id = randomUUID(), version = 1) {
   const files = [{ name: 'index.html', data: `<meta name="proto-site-id" content="${id}"><h1>Release ${version}</h1>` }, { name: 'style.css', data: '.hero{color:green}' }, { name: 'site.js', data: 'void 0;' }].map(({ name, data }) => ({ name, sha256: digest(data), data: Buffer.from(data).toString('base64') }));
@@ -64,6 +64,20 @@ test('staging upload, candidate verification and activation are separate and pri
   assert.equal((await f.call('/internal/prepare', { host, auth: f.basic, body: p })).status, 405);
   const profile = await f.call('/google.json', { host, auth: f.basic }); assert.equal(profile.status, 200); assert.match(profile.headers.get('cache-control'), /no-store/); assert.equal(f.googleCalls(), 1);
   assert.doesNotMatch(await readFile(path.join(f.config.dataDir, 'releases', p.id, '1', 'index.html'), 'utf8'), /Ephemeral/);
+});
+test('staging uses one proxy hop for rate limits without trusting forwarded hosts', async (t) => {
+  const f = await fixture(t);
+  const headers = { Host: f.config.stagingHost, Authorization: f.bearer };
+  const request = (forwardedFor) => hostFetch(f.base + '/internal/health', { headers: { ...headers, 'X-Forwarded-For': forwardedFor } });
+  const first = await request('203.0.113.1, 198.51.100.24');
+  const spoof = await request('203.0.113.2, 198.51.100.24');
+  const other = await request('198.51.100.25');
+  for (const response of [first, spoof, other]) assert.equal(response.status, 200);
+  const remaining = (response) => Number(response.headers.get('ratelimit').match(/r=(\d+)/)[1]);
+  assert.equal(remaining(spoof), remaining(first) - 1);
+  assert.equal(remaining(other), remaining(first));
+  const forgedHost = await hostFetch(f.base + '/internal/health', { headers: { ...headers, Host: 'unregistered.preview.example.com', 'X-Forwarded-Host': f.config.stagingHost } });
+  assert.equal(forgedHost.status, 404);
 });
 test('staging rejects traversal, tampering, duplicate files, slug takeover and release replacement', async (t) => {
   const f = await fixture(t); const p = payload();
